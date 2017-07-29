@@ -5,3 +5,13 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+profile_admin = 'Admin'
+profile = Profile.create!(name: profile_admin, admin: true) unless Profile.where(name: profile_admin).present?
+
+User.create!(
+  name: 'User', email: 'dev@dev.com', password: 'password',
+  password_confirmation: 'password', profile_id: Profile.find_by(name: profile_admin).id
+) unless User.where(email: 'dev@dev.com').present?
+
+AppModule.verify_modules

@@ -1,0 +1,8 @@
+<h1>Home</h1>
+
+<ul>
+  <% @modules.each do |m|%>
+    <li><%= link_to m.module, controller: m.controller.gsub!('Controller', '').underscore %></li>
+  <% end %>
+  <li><%= link_to('Logout', destroy_user_session_path, method: :delete) %></li>
+</ul>

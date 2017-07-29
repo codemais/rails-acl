@@ -1,0 +1,38 @@
+<%= form_with(model: profile, local: true) do |f| %>
+  <% if profile.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(profile.errors.count, "error") %> prohibited this profile from being saved:</h2>
+
+      <ul>
+      <% profile.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name, id: :profile_name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :admin %>
+    <%= f.check_box :admin, id: :profile_admin %>
+  </div>
+
+  <h3>Permissions</h3>
+
+  <% AppModule.all.each_with_index do |m, i| %>
+    <p><%= m.controller %></p>
+    <% m.actions.each_with_index do |action, j| %>
+      <%= hidden_field_tag "profile[permissions][#{i}][app_module]", m.id %>
+      <%= check_box_tag "profile[permissions][#{i}][actions][#{j}][action]", action, f.object.has_action(m.id, action) %>
+      <%= action %>
+    <% end %>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
