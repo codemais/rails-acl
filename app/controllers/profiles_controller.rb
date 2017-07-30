@@ -26,9 +26,9 @@ class ProfilesController < ApplicationController
   # POST /profiles
   # POST /profiles.json
   def create
-    @profile = Profile.new(profile_params.except(:permissions))
+    @profile = Profile.new(profile_params)
     respond_to do |format|
-      if @profile.save && @profile.save_permissions(profile_params)
+      if @profile.save && @profile.save_permissions(params[:permissions])
         format.html { redirect_to @profile, notice: 'Profile was successfully created.' }
         format.json { render :show, status: :created, location: @profile }
       else
@@ -41,10 +41,8 @@ class ProfilesController < ApplicationController
   # PATCH/PUT /profiles/1
   # PATCH/PUT /profiles/1.json
   def update
-    # abort profile_params.inspect
-    # abort params[:profile].inspect
     respond_to do |format|
-      if @profile.update(profile_params)
+      if @profile.update(profile_params) && @profile.save_permissions(params[:permissions])
         format.html { redirect_to @profile, notice: 'Profile was successfully updated.' }
         format.json { render :show, status: :ok, location: @profile }
       else
@@ -72,8 +70,7 @@ class ProfilesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def profile_params
-      params.require(:profile).permit(:name, :admin,
-       permissions: [:app_module, actions:[:action]])
+      params.require(:profile).permit(:name, :admin)
     end
 
     def verify_modules

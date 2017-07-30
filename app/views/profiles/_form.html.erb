@@ -26,8 +26,8 @@
   <% AppModule.all.each_with_index do |m, i| %>
     <p><%= m.controller %></p>
     <% m.actions.each_with_index do |action, j| %>
-      <%= hidden_field_tag "profile[permissions][#{i}][app_module]", m.id %>
-      <%= check_box_tag "profile[permissions][#{i}][actions][#{j}][action]", action, f.object.has_action(m.id, action) %>
+      <%= hidden_field_tag "permissions[#{i}][app_module]", m.id %>
+      <%= check_box_tag "permissions[#{i}][actions][#{j}][action]", action, f.object.has_action(m.id, action) %>
       <%= action %>
     <% end %>
   <% end %>

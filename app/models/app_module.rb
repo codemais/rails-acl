@@ -9,7 +9,8 @@ class AppModule < ApplicationRecord
       controller = controller_name_sanitize(c).constantize
       if EXCEPT_MODULES.exclude?(controller)
         app_module = self.find_or_initialize_by(module: self.name_sanitize(controller.name))
-        app_module.update_attributes(controller: controller.name, actions: controller.action_methods)
+        actions = controller.action_methods.select { |a| [:new, :edit].exclude? a.to_sym }
+        app_module.update_attributes(controller: controller.name, actions: actions)
       end
     end
     self.remove_deleted_modules controllers
