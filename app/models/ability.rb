@@ -3,12 +3,20 @@ class Ability
 
   def initialize(user)
     user ||= User.new
-    if user.is_admin?
+    if user.admin?
       can :manage, :all
     else
       Permission.all.each do |p|
-        can p.actions.collect{|action| action.to_sym}, p.app_module.module.constantize if defined? p.app_module.module
+        if defined? p.app_module.module
+          can get_action(p), p.app_module.module.constantize
+        end
       end
     end
+  end
+
+  private
+
+  def get_action(permission)
+    permission.actions.collect(&:key)
   end
 end

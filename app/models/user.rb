@@ -6,8 +6,7 @@ class User < ApplicationRecord
 
   belongs_to :profile
 
-  def is_admin?
-    return self.profile.nil? ? false : self.profile.admin
+  def admin?
+    profile.nil? ? false : profile.admin
   end
-
 end
